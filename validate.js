@@ -1,3 +1,4 @@
+
 $.fn.validate = function (options) {
 	var defaults = {
 		sucClass: 'suc',
@@ -78,37 +79,30 @@ $.fn.validate = function (options) {
 		}
 		if (!isActive) {
 			if (checked) {
-				if (typeof opts.success == 'function') {
-					opts.success([$this]);
-				}
+				opts.success([$this]);
 			} else {
-				if (typeof opts.error == 'function') {
-					opts.error(errArr);
-				}
+				opts.error(errArr);
 			}
 		}
 	}
 
-	if (isActive) {
-		var $list = $self.find('input[data-validate-type]');
-		$list.each(Active);
-		if (errArr.length == 0) {
-			if (typeof opts.success == 'function') {
+	$self.find('input[data-validate-type]').each(function (i, v) {
+		$(this).on(opts.activeType, Active);
+	});
+
+	return {
+		validate: function () {
+			var $list = $self.find('input[data-validate-type]');
+			$list.each(Active);
+			if (errArr.length == 0) {
 				opts.success($list);
-			}
-		} else {
-			if (opts.autoFocus) {
-				errArr[0].item.focus();
-			}
-			if (typeof opts.error == 'function') {
-				console.log(errArr);
+			} else {
+				if (opts.autoFocus) {
+					errArr[0].item.focus();
+				}
 				opts.error(errArr);
 			}
+			return errArr.length == 0;
 		}
-		return errArr.length == 0;
-	} else {
-		$self.find('input[data-validate-type]').each(function (i, v) {
-			$(this).on(opts.activeType, Active);
-		});
-	}
+	};
 }
