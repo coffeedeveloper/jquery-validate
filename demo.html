@@ -2,16 +2,29 @@
 <html>
 <head>
 	<title>jquery validate demo</title>
+	<style type="text/css">
+		.suc { border: 1px solid green; }
+		.err { border: 1px solid red; }
+	</style>
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="validate.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			//console.log($('input[data-validate-require]'));
-			console.log($('#txt').data('validate-require'));
-			console.log($('#txt').data('validateRequire'));
+			$('.container').validate({
+				autoFocus: true,
+				error: function(errArr){
+					console.log(errArr)
+					for(var info in errArr){
+						console.log(errArr[info]);
+					}
+				}
+			});
 		});
 	</script>
 </head>
 <body>
-	<input id="txt" type="text" data-validate-require="true" />
+<div class="container">
+	<input id="txt" type="text" data-validate-require="true" data-validate-type="email" data-validate-msg="wakaka" />
+</div>
 </body>
 </html>
