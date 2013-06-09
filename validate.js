@@ -1,6 +1,6 @@
-$.fn.valida = function(options){
+$.fn.validate = function(options){
 	var defaults = {
-		prefix: 'validate'
+		//prefix: 'validate'
 		sucClass: 'suc',
 		errClass: 'err',
 		success: $.noop,
@@ -27,12 +27,25 @@ $.fn.valida = function(options){
 		}
 	}
 
-	var require = 'data-' + opts.prefix + 'require';
-	$self.find('input[' + require + ']').each(function(){
+	//var require = 'data-' + opts.prefix + 'require';
+	$self.find('input[data-validate-require]').each(function(){
 		if(!$(this).val()){
-			errArr.push($(this).addClass(opts.sucClass).removeClass(opts.errClass));
+			errArr.push({
+				item:$(this).addClass(opts.sucClass).removeClass(opts.errClass),
+				msg: $(this).data('validate-msg');
+			});
 		}else{
-			errArr.push($(this).addClass(opts.errClass).removeClass(opts.sucClass));
+			$(this).addClass(opts.errClass).removeClass(opts.sucClass);
 		}
 	});
+
+	if(errArr.length == 0){
+		if(typeof opts.success == 'function'){
+			opts.success();
+		}
+	}else{
+		if(typeof opts.error == function(){
+			opts.error(errArr);
+		}
+	}
 }
