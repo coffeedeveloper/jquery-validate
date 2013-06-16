@@ -1,5 +1,4 @@
-
-$.fn.validate = function (options) {
+$.fn.validate = function(options) {
 	var defaults = {
 		sucClass: 'suc',
 		errClass: 'err',
@@ -14,7 +13,7 @@ $.fn.validate = function (options) {
 		errArr = [],
 		isActive = options == undefined;
 
-	var CheckVal = function (type, val, $item) {
+	var CheckVal = function(type, val, $item) {
 		var result = true;
 		switch (type.toLowerCase()) {
 			case 'url':
@@ -22,15 +21,32 @@ $.fn.validate = function (options) {
 			case 'email':
 				break;
 			case 'integer':
+				//todo using regular
+				if (isNaN(parseInt(val))) {
+					return false;
+				};
+				break;
+			case 'float':
+				//todo using regular
+				if (isNaN(parseFloat(val))) {
+					return false;
+				};
 				break;
 			case 'required':
 				if (!val) {
 					result = false;
 				}
 				break;
+			case 'length':
+				var r = $item.data('validateLength').split(',');
+				if (val.length < r[0] || val.length > r[1]) {
+					result = false;
+				}
+				break;
 			case 'range':
 				var r = $item.data('validateRange').split(',');
-				if (val.length < r[0] || val.length > r[1]) {
+				val = parseFloat(val);
+				if (val < r[0] || val > r[1]) {
 					result = false;
 				}
 				break;
@@ -50,7 +66,7 @@ $.fn.validate = function (options) {
 		return result;
 	}
 
-	var MakeErr = function ($item, type) {
+	var MakeErr = function($item, type) {
 		errArr.push({
 			item: $item,
 			type: type,
@@ -58,7 +74,7 @@ $.fn.validate = function (options) {
 		});
 	}
 
-	var Status = function ($item, status, type) {
+	var Status = function($item, status, type) {
 		if (status) {
 			$item.addClass(opts.sucClass).removeClass(opts.errClass);
 		} else {
@@ -67,7 +83,7 @@ $.fn.validate = function (options) {
 		return status;
 	}
 
-	var Active = function () {
+	var Active = function() {
 		var $this = $(this);
 		var types = $this.data('validateType').split('|');
 		var checked = true;
@@ -86,12 +102,12 @@ $.fn.validate = function (options) {
 		}
 	}
 
-	$self.find('input[data-validate-type]').each(function (i, v) {
+	$self.find('input[data-validate-type]').each(function(i, v) {
 		$(this).on(opts.activeType, Active);
 	});
 
 	return {
-		validate: function () {
+		validate: function() {
 			var $list = $self.find('input[data-validate-type]');
 			$list.each(Active);
 			if (errArr.length == 0) {
