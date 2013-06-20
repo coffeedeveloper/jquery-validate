@@ -11,7 +11,11 @@ $.fn.validate = function(options) {
 
 	var $self = $(this),
 		errArr = [],
-		isActive = options == undefined;
+		isActive = options == undefined,
+		defaultMsg = {
+			email: 'email',
+			url: 'url'
+		}
 
 	var CheckVal = function(type, val, $item) {
 		var result = true;
